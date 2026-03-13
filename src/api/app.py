@@ -8,12 +8,14 @@ app = Flask(__name__)
 RUN_ID = os.environ.get("MLFLOW_RUN_ID", "1ce1649c820d4e33ab0795e777b8cb4c")
 MAX_LEN = int(os.environ.get("MAX_LEN", "40"))
 THRESHOLD = float(os.environ.get("THRESHOLD", "0.5"))
+UNIT_TEST_MODE = os.environ.get("UNIT_TEST_MODE", "0") == "1"
 
-predictor = SentimentPredictor(
-    PredictorConfig(run_id=RUN_ID, max_len=MAX_LEN, threshold=THRESHOLD)
-)
+predictor = None
+if not UNIT_TEST_MODE:
+    predictor = SentimentPredictor(
+        PredictorConfig(run_id=RUN_ID, max_len=MAX_LEN, threshold=THRESHOLD)
+    )
 
-# --- Mini page HTML intégrée (ultra léger, pas de template à déployer) ---
 HTML = """
 <!doctype html>
 <html>
@@ -38,21 +40,42 @@ HTML = """
 </html>
 """
 
+
 @app.get("/health")
 def health():
-    return {"status": "ok", "run_id": RUN_ID}
+    return {
+        "status": "ok",
+        "run_id": RUN_ID,
+        "unit_test_mode": UNIT_TEST_MODE,
+    }
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     text = ""
     result = None
+
     if request.method == "POST":
         text = request.form.get("text", "")
         if text.strip():
-            result = predictor.predict_one(text)
+            if UNIT_TEST_MODE:
+                result = {
+                    "tweet": text,
+                    "tweet_clean": text.lower().strip(),
+                    "proba_pos": 0.9,
+                    "proba_neg": 0.1,
+                    "pred_label": 1,
+                    "pred_text": "positif",
+                    "threshold": THRESHOLD,
+                    "bad_buzz": False,
+                }
+            else:
+                result = predictor.predict_one(text)
         else:
             result = {"error": "Texte vide."}
+
     return render_template_string(HTML, text=text, result=result)
+
 
 @app.post("/predict")
 def predict():
@@ -62,8 +85,21 @@ def predict():
     if not isinstance(text, str) or not text.strip():
         return jsonify({"error": "Missing field 'text' (non-empty string)."}), 400
 
+    if UNIT_TEST_MODE:
+        return jsonify({
+            "tweet": text,
+            "tweet_clean": text.lower().strip(),
+            "proba_pos": 0.9,
+            "proba_neg": 0.1,
+            "pred_label": 1,
+            "pred_text": "positif",
+            "threshold": THRESHOLD,
+            "bad_buzz": False,
+        }), 200
+
     out = predictor.predict_one(text)
     return jsonify(out), 200
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)
