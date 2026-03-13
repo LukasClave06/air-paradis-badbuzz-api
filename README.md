@@ -20,7 +20,7 @@ Cette version du projet correspond au dossier de déploiement contenant :
 
 ## Structure du projet
 
-bash```
+```
 deployment/
 ├── mlruns/
 │ └── 249839535688655471/
