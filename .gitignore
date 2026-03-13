@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# pytest
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# virtual env (si jamais tu en mets un dans deployment)
+venv/
+.env/
+
+# logs
+*.log
