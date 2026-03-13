@@ -1,267 +1,251 @@
-# Air Paradis – API de prédiction de sentiment
+# Air Paradis – API de prédiction de sentiment (Bad Buzz Detection)
 
-Ce projet fournit une API d’inférence permettant de prédire le sentiment d’un tweet
-positif ou négatif pour la compagnie Air Paradis.
+## Objectif du projet
 
-Le modèle utilisé est un réseau de neurones LSTM avec embeddings GloVe,
-entraîné sur le dataset Sentiment140 et versionné avec MLflow.
+Ce projet a pour objectif de détecter automatiquement le sentiment de tweets mentionnant la compagnie fictive **Air Paradis**, afin d’anticiper les situations de **bad buzz**.
 
-Cette version du projet correspond au dossier de déploiement contenant :
+Deux approches ont été développées :
 
-- le modèle final
-- les artifacts MLflow
-- l’API Flask
-- le code de preprocessing
-- les tests unitaires
-- les dépendances nécessaires au déploiement
+- Modèle avancé (Deep Learning) : LSTM + embeddings GloVe
+- Modèle classique : TF-IDF + Logistic Regression
+
+Le modèle avancé offre de meilleures performances, mais le modèle classique a été retenu pour le déploiement afin de respecter les contraintes techniques des offres cloud gratuites.
+
+---
+
+## Choix du modèle déployé
+
+| Modèle | Performance | Taille | Déploiement cloud gratuit |
+|--------|-----------|---------|----------------------------|
+| LSTM + GloVe | ⭐⭐⭐⭐ | Très lourd | ❌ trop volumineux |
+| BERT | ⭐⭐⭐⭐⭐ | Très lourd | ❌ impossible en free tier |
+| LogReg + TF-IDF | ⭐⭐⭐ | Léger | ✅ compatible |
+
+Le modèle déployé dans l’API est donc :
+
+> Logistic Regression + TF-IDF enregistré avec MLflow
+
+Le modèle est chargé via MLflow à partir d’un run local.
+
+---
+
+## Architecture du projet
 
 
-------------------------------------------------------------
-
-## Structure du projet
-
-```
 deployment/
-├── mlruns/                         # Run MLflow contenant le modèle final
-│   └── 249839535688655471/
-│       ├── meta.yaml
-│       └── 1ce1649c820d4e33ab0795e777b8cb4c/
-│           ├── artifacts/
-│           ├── metrics/
-│           ├── params/
-│           ├── tags/
-│           └── meta.yaml
+├── .github/
+│ └── workflows/
+│ └── ci.yml
+│
+├── mlruns/
+│ └── 249839535688655471/
+│ └── be260e8b8f3e4ae7b3018afa00a828ec/
+│ └── artifacts/
+│ └── model/
 │
 ├── src/
-│   ├── __init__.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── app.py                  # API Flask
-│   │   └── predictor.py            # Chargement modèle + prédiction
-│   │
-│   └── common/
-│       ├── __init__.py
-│       └── text_cleaning.py        # Nettoyage du texte
+│ ├── api/
+│ │ ├── init.py
+│ │ ├── app.py
+│ │ └── predictor.py
+│ │
+│ └── common/
+│ ├── init.py
+│ └── text_cleaning.py
 │
 ├── tests/
-│   └── test_api.py                 # Tests unitaires pytest
+│ └── test_api.py
 │
-├── requirements.txt               # Dépendances runtime
-├── wsgi.py                        # Lancement serveur (cloud)
 ├── .gitignore
-└── README.md
-```
-
-------------------------------------------------------------
-
-## Modèle retenu
-
-Plusieurs modèles ont été testés :
-
-- Régression logistique + TF-IDF
-- Random Forest + TF-IDF
-- LSTM + Word2Vec
-- LSTM + GloVe
-- BERT (sur échantillon réduit)
-
-Le modèle retenu pour le déploiement est :
-
-LSTM + embeddings GloVe
-
-Raisons du choix :
-
-- bonnes performances sur test
-- temps d’entraînement raisonnable
-- taille du modèle compatible avec le déploiement
-- inférence rapide
-- plus stable que BERT dans les contraintes techniques du projet
-
-Le modèle final est versionné avec MLflow et chargé via son run_id.
+├── pytest.ini
+├── README.md
+├── requirements.txt
+└── wsgi.py
 
 
-------------------------------------------------------------
+---
 
 ## Fonctionnement de l’API
 
-L’API Flask permet :
+L’API Flask expose :
 
-- de charger le modèle MLflow
-- de nettoyer le texte
-- de tokenizer avec le tokenizer sauvegardé
-- de prédire le sentiment
-- de retourner les probabilités
-
-Sortie du modèle :
-
-- proba_pos → probabilité tweet positif
-- proba_neg → probabilité tweet négatif
-- pred_label → 0 ou 1
-- pred_text → positif / negatif
-- bad_buzz → True si proba_neg >= 0.5
+### Health check
 
 
-------------------------------------------------------------
-
-## Endpoints
-
-### Vérification
-```
 GET /health
-```
-Réponse :
 
-```
+
+Retour :
+
+
 {
 "status": "ok",
-"run_id": "..."
+"model_type": "logreg_tfidf"
 }
-```
+
 
 ---
 
 ### Prédiction
-```
+
+
 POST /predict
-```
+
+
 Body :
 
-```
+
 {
-"text": "Air Paradis is amazing"
+"text": "Air Paradis is amazing!"
 }
-```
+
 
 Réponse :
 
-```
+
 {
 "tweet": "...",
 "tweet_clean": "...",
-"proba_pos": 0.91,
-"proba_neg": 0.09,
+"proba_pos": 0.93,
+"proba_neg": 0.07,
 "pred_label": 1,
 "pred_text": "positif",
 "bad_buzz": false
 }
-```
+
 
 ---
 
-### Interface web simple
-```
+### Interface web
+
+
 GET /
-```
-Page HTML minimale permettant de tester l’API.
 
 
-------------------------------------------------------------
+Permet de tester la prédiction via un formulaire HTML.
 
-## Prérequis
+---
 
-- Python 3.11
-- environnement virtuel recommandé
-- présence du dossier mlruns contenant le modèle
+## MLflow
+
+Le modèle est chargé depuis MLflow :
 
 
-------------------------------------------------------------
+runs:/be260e8b8f3e4ae7b3018afa00a828ec/model
 
-## Variables d’environnement
 
-L’API utilise les variables suivantes :
-```
-MLFLOW_TRACKING_URI  
-```
-chemin vers le dossier mlruns
-```
+Tracking local :
+
+
+deployment/mlruns/
+
+
+Variables utilisées :
+
+
+MLFLOW_TRACKING_URI
 MLFLOW_RUN_ID
-```  
-identifiant du run MLflow du modèle final
-```
-MAX_LEN
-```  
-longueur maximale des séquences (default = 40)
-```
 THRESHOLD
-```  
-seuil de décision (default = 0.5)
 
 
-------------------------------------------------------------
-
-## Lancement en local
-
-Activer l’environnement virtuel :
-
-```
-venv_airparadis_train\Scripts\activate
-```
-
-Définir MLflow :
-
-```
-$env:MLFLOW_TRACKING_URI="file:///C:/chemin/vers/deployment/mlruns"
-$env:MLFLOW_RUN_ID="1ce1649c820d4e33ab0795e777b8cb4c"
-```
-
-Lancer l’API :
-
-```
-python -m src.api.app
-```
-
-Ouvrir :
-
-```
-http://127.0.0.1:8000
-```
-
-
-------------------------------------------------------------
+---
 
 ## Tests unitaires
 
+Tests réalisés avec pytest.
+
 Lancer :
 
-```
+
 pytest -v
-```
-
-Résultat attendu :
 
 
-3 passed
+Configuration :
 
 
-
-------------------------------------------------------------
-
-## Objectif MLOps
-
-Ce projet démontre :
-
-- suivi des modèles avec MLflow
-- encapsulation du modèle dans une API Flask
-- tests unitaires automatisés avec pytest
-- structure compatible CI/CD
-- séparation entraînement / déploiement
-- déploiement sur plateforme Cloud
+pytest.ini
 
 
-------------------------------------------------------------
+Permet d’importer correctement le package src.
 
-## Déploiement
+---
 
-Le projet est conçu pour être déployé sur :
+## CI/CD avec GitHub Actions
 
-- PythonAnywhere
-- serveur Flask / WSGI
-- plateforme Cloud
+Workflow :
 
 
-------------------------------------------------------------
+.github/workflows/ci.yml
+
+
+À chaque push :
+
+- installation des dépendances
+- lancement pytest
+- validation automatique
+
+Objectif :
+
+> garantir que l’API fonctionne avant déploiement
+
+---
+
+## Déploiement cloud
+
+Déploiement prévu sur :
+
+- PythonAnywhere (free tier)
+- Azure (optionnel)
+- autres plateformes compatibles WSGI
+
+Fichier utilisé :
+
+
+wsgi.py
+
+
+Le modèle chargé est le modèle MLflow local.
+
+---
+
+## Lancer en local
+
+Activer l’environnement :
+
+
+venv\Scripts\activate
+
+
+Définir variables :
+
+
+MLFLOW_TRACKING_URI=file:./mlruns
+MLFLOW_RUN_ID=be260e8b8f3e4ae7b3018afa00a828ec
+
+
+Lancer :
+
+
+python -m src.api.app
+
+
+Puis :
+
+
+http://127.0.0.1:8000
+
+
+---
 
 ## Auteur
 
-Lukas C  
-Formation Ingénieur IA – OpenClassrooms  
-Projet : Détection de bad buzz pour Air Paradis
+Projet réalisé dans le cadre de la formation IA / Data Scientist.
+
+Objectifs pédagogiques :
+
+- MLflow
+- API Flask
+- CI/CD
+- GitHub Actions
+- Déploiement cloud
+- MLOps

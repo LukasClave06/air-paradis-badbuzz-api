@@ -1,3 +1,0 @@
-Confusion matrix (rows=true, cols=pred) labels=[0 (neg), 1 (pos)]
-[[66829 13171]
- [12430 67570]]

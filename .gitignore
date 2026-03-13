@@ -13,9 +13,12 @@ Thumbs.db
 .vscode/
 .idea/
 
-# virtual env (si jamais tu en mets un dans deployment)
+# virtual env 
 venv/
 .env/
 
 # logs
 *.log
+
+# Glove run
+.1ce1649c820d4e33ab0795e777b8cb4c/

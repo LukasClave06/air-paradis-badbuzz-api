@@ -5,15 +5,14 @@ from src.api.predictor import PredictorConfig, SentimentPredictor
 
 app = Flask(__name__)
 
-RUN_ID = os.environ.get("MLFLOW_RUN_ID", "1ce1649c820d4e33ab0795e777b8cb4c")
-MAX_LEN = int(os.environ.get("MAX_LEN", "40"))
+RUN_ID = os.environ.get("MLFLOW_RUN_ID", "be260e8b8f3e4ae7b3018afa00a828ec")
 THRESHOLD = float(os.environ.get("THRESHOLD", "0.5"))
 UNIT_TEST_MODE = os.environ.get("UNIT_TEST_MODE", "0") == "1"
 
 predictor = None
 if not UNIT_TEST_MODE:
     predictor = SentimentPredictor(
-        PredictorConfig(run_id=RUN_ID, max_len=MAX_LEN, threshold=THRESHOLD)
+        PredictorConfig(run_id=RUN_ID, threshold=THRESHOLD)
     )
 
 HTML = """
@@ -40,15 +39,14 @@ HTML = """
 </html>
 """
 
-
 @app.get("/health")
 def health():
     return {
         "status": "ok",
         "run_id": RUN_ID,
         "unit_test_mode": UNIT_TEST_MODE,
+        "model_type": "logreg_tfidf",
     }
-
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -76,7 +74,6 @@ def home():
 
     return render_template_string(HTML, text=text, result=result)
 
-
 @app.post("/predict")
 def predict():
     payload = request.get_json(silent=True) or {}
@@ -99,7 +96,6 @@ def predict():
 
     out = predictor.predict_one(text)
     return jsonify(out), 200
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)

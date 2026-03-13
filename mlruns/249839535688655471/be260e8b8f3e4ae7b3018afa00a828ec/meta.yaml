@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/projets_openclassroom/air-paradis-badbuzz/deployment/mlruns/249839535688655471/be260e8b8f3e4ae7b3018afa00a828ec/artifacts
+end_time: 1771596199036
+entry_point_name: ''
+experiment_id: '249839535688655471'
+lifecycle_stage: active
+run_id: be260e8b8f3e4ae7b3018afa00a828ec
+run_name: logreg_full_basic_final
+run_uuid: be260e8b8f3e4ae7b3018afa00a828ec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771596133665
+status: 3
+tags: []
+user_id: theo-
