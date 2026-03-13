@@ -7,6 +7,7 @@ Le modèle utilisé est un réseau de neurones LSTM avec embeddings GloVe,
 entraîné sur le dataset Sentiment140 et versionné avec MLflow.
 
 Cette version du projet correspond au dossier de déploiement contenant :
+
 - le modèle final
 - les artifacts MLflow
 - l’API Flask
@@ -18,6 +19,7 @@ Cette version du projet correspond au dossier de déploiement contenant :
 ------------------------------------------------------------
 
 ## Structure du projet
+
 
 deployment/
 ├── mlruns/ # Run MLflow contenant le modèle final
@@ -49,6 +51,7 @@ deployment/
 ├── wsgi.py # Lancement serveur (cloud)
 ├── .gitignore
 └── README.md
+
 
 
 ------------------------------------------------------------
@@ -238,8 +241,8 @@ Ce projet démontre :
 - encapsulation du modèle dans une API Flask
 - tests unitaires automatisés avec pytest
 - structure compatible CI/CD
-- déploiement sur plateforme Cloud
 - séparation entraînement / déploiement
+- déploiement sur plateforme Cloud
 
 
 ------------------------------------------------------------
