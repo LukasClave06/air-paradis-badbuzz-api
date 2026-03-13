@@ -22,7 +22,7 @@ Cette version du projet correspond au dossier de déploiement contenant :
 
 
 deployment/
-├── mlruns/ # Run MLflow contenant le modèle final
+├── mlruns/
 │ └── 249839535688655471/
 │ ├── meta.yaml
 │ └── 1ce1649c820d4e33ab0795e777b8cb4c/
@@ -36,24 +36,21 @@ deployment/
 │ ├── init.py
 │ ├── api/
 │ │ ├── init.py
-│ │ ├── app.py # API Flask
-│ │ └── predictor.py # Chargement modèle + prédiction
+│ │ ├── app.py
+│ │ └── predictor.py
 │ │
 │ └── common/
 │ ├── init.py
-│ └── text_cleaning.py # Nettoyage du texte
+│ └── text_cleaning.py
 │
 ├── tests/
-│ └── test_api.py # Tests unitaires pytest
+│ └── test_api.py
 │
-├── requirements.txt # Dépendances runtime
-├── requirements_dev.txt # Dépendances dev / tests
-├── wsgi.py # Lancement serveur (cloud)
+├── requirements.txt
+├── requirements_dev.txt
+├── wsgi.py
 ├── .gitignore
 └── README.md
-
-
-
 
 ------------------------------------------------------------
 
