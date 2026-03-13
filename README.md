@@ -106,35 +106,35 @@ Sortie du modèle :
 ## Endpoints
 
 ### Vérification
-
+```
 GET /health
-
+```
 Réponse :
 
-
+```
 {
 "status": "ok",
 "run_id": "..."
 }
-
+```
 
 ---
 
 ### Prédiction
-
+```
 POST /predict
-
+```
 Body :
 
-
+```
 {
 "text": "Air Paradis is amazing"
 }
-
+```
 
 Réponse :
 
-
+```
 {
 "tweet": "...",
 "tweet_clean": "...",
@@ -144,14 +144,14 @@ Réponse :
 "pred_text": "positif",
 "bad_buzz": false
 }
-
+```
 
 ---
 
 ### Interface web simple
-
+```
 GET /
-
+```
 Page HTML minimale permettant de tester l’API.
 
 
@@ -189,28 +189,28 @@ seuil de décision (default = 0.5)
 
 Activer l’environnement virtuel :
 
-
+```
 venv_airparadis_train\Scripts\activate
-
+```
 
 Définir MLflow :
 
-
+```
 $env:MLFLOW_TRACKING_URI="file:///C:/chemin/vers/deployment/mlruns"
 $env:MLFLOW_RUN_ID="1ce1649c820d4e33ab0795e777b8cb4c"
-
+```
 
 Lancer l’API :
 
-
+```
 python -m src.api.app
-
+```
 
 Ouvrir :
 
-
+```
 http://127.0.0.1:8000
-
+```
 
 
 ------------------------------------------------------------
@@ -219,9 +219,9 @@ http://127.0.0.1:8000
 
 Lancer :
 
-
+```
 pytest -v
-
+```
 
 Résultat attendu :
 
