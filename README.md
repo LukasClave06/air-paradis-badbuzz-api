@@ -47,7 +47,6 @@ deployment/
 │   └── test_api.py                 # Tests unitaires pytest
 │
 ├── requirements.txt               # Dépendances runtime
-├── requirements_dev.txt           # Dépendances dev / tests
 ├── wsgi.py                        # Lancement serveur (cloud)
 ├── .gitignore
 └── README.md
