@@ -31,7 +31,7 @@ Le modèle est chargé via MLflow à partir d’un run local.
 
 ## Architecture du projet
 
-
+```
 deployment/
 ├── .github/
 │ └── workflows/
@@ -61,7 +61,7 @@ deployment/
 ├── README.md
 ├── requirements.txt
 └── wsgi.py
-
+```
 
 ---
 
