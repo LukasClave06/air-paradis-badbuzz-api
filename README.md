@@ -18,22 +18,35 @@ Cette version du projet correspond au dossier de déploiement contenant :
 ## Structure du projet
 
 deployment/
+├── mlruns/                         # Run MLflow contenant le modèle final
+│   └── 249839535688655471/
+│       ├── meta.yaml
+│       └── 1ce1649c820d4e33ab0795e777b8cb4c/
+│           ├── artifacts/
+│           ├── metrics/
+│           ├── params/
+│           ├── tags/
+│           └── meta.yaml
 │
-├── mlruns/ # Run MLflow contenant le modèle final
 ├── src/
-│ ├── api/
-│ │ ├── app.py # API Flask
-│ │ └── predictor.py # Chargement modèle + prédiction
-│ │
-│ └── common/
-│ └── text_cleaning.py # Nettoyage du texte
+│   ├── __init__.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── app.py                  # API Flask
+│   │   └── predictor.py            # Chargement modèle + prédiction
+│   │
+│   └── common/
+│       ├── __init__.py
+│       └── text_cleaning.py        # Nettoyage du texte
 │
-├── tests/ # Tests unitaires pytest
-├── requirements.txt # Dépendances runtime
-├── requirements_dev.txt # Dépendances dev / tests
-├── wsgi.py # Lancement serveur (cloud)
+├── tests/
+│   └── test_api.py                 # Tests unitaires pytest
+│
+├── requirements.txt               # Dépendances runtime
+├── requirements_dev.txt           # Dépendances dev / tests
+├── wsgi.py                        # Lancement serveur (cloud)
+├── .gitignore
 └── README.md
-
 
 
 ## Modèle utilisé
@@ -172,5 +185,5 @@ Ce projet démontre :
 Lukas C  
 Formation Ingénieur IA – OpenClassrooms  
 Projet : Détection de bad buzz pour Air Paradis
-```
+
 
