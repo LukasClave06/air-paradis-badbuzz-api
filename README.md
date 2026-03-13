@@ -169,17 +169,21 @@ Page HTML minimale permettant de tester l’API.
 ## Variables d’environnement
 
 L’API utilise les variables suivantes :
-
+```
 MLFLOW_TRACKING_URI  
+```
 chemin vers le dossier mlruns
-
-MLFLOW_RUN_ID  
+```
+MLFLOW_RUN_ID
+```  
 identifiant du run MLflow du modèle final
-
-MAX_LEN  
+```
+MAX_LEN
+```  
 longueur maximale des séquences (default = 40)
-
-THRESHOLD  
+```
+THRESHOLD
+```  
 seuil de décision (default = 0.5)
 
 
