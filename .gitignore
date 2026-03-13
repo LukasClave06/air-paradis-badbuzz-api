@@ -16,9 +16,7 @@ Thumbs.db
 # virtual env 
 venv/
 .env/
+venv-airparadis/
 
 # logs
 *.log
-
-# Glove run
-.1ce1649c820d4e33ab0795e777b8cb4c/
