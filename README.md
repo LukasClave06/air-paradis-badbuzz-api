@@ -21,8 +21,7 @@ Cette version du projet correspond au dossier de déploiement contenant :
 ## Structure du projet
 
 
-deployment/
-├── mlruns/
+deployment/├── mlruns/
 │ └── 249839535688655471/
 │ ├── meta.yaml
 │ └── 1ce1649c820d4e33ab0795e777b8cb4c/
