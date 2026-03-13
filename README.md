@@ -22,33 +22,33 @@ Cette version du projet correspond au dossier de déploiement contenant :
 
 ```
 deployment/
-├── mlruns/
-│ └── 249839535688655471/
-│ ├── meta.yaml
-│ └── 1ce1649c820d4e33ab0795e777b8cb4c/
-│ ├── artifacts/
-│ ├── metrics/
-│ ├── params/
-│ ├── tags/
-│ └── meta.yaml
+├── mlruns/                         # Run MLflow contenant le modèle final
+│   └── 249839535688655471/
+│       ├── meta.yaml
+│       └── 1ce1649c820d4e33ab0795e777b8cb4c/
+│           ├── artifacts/
+│           ├── metrics/
+│           ├── params/
+│           ├── tags/
+│           └── meta.yaml
 │
 ├── src/
-│ ├── init.py
-│ ├── api/
-│ │ ├── init.py
-│ │ ├── app.py
-│ │ └── predictor.py
-│ │
-│ └── common/
-│ ├── init.py
-│ └── text_cleaning.py
+│   ├── __init__.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── app.py                  # API Flask
+│   │   └── predictor.py            # Chargement modèle + prédiction
+│   │
+│   └── common/
+│       ├── __init__.py
+│       └── text_cleaning.py        # Nettoyage du texte
 │
 ├── tests/
-│ └── test_api.py
+│   └── test_api.py                 # Tests unitaires pytest
 │
-├── requirements.txt
-├── requirements_dev.txt
-├── wsgi.py
+├── requirements.txt               # Dépendances runtime
+├── requirements_dev.txt           # Dépendances dev / tests
+├── wsgi.py                        # Lancement serveur (cloud)
 ├── .gitignore
 └── README.md
 ```
