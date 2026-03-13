@@ -5,14 +5,26 @@ from src.api.predictor import PredictorConfig, SentimentPredictor
 
 app = Flask(__name__)
 
-RUN_ID = os.environ.get("MLFLOW_RUN_ID", "be260e8b8f3e4ae7b3018afa00a828ec")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+MODEL_PATH = os.environ.get(
+    "MODEL_PATH",
+    os.path.join(
+        BASE_DIR,
+        "mlruns",
+        "249839535688655471",
+        "be260e8b8f3e4ae7b3018afa00a828ec",
+        "artifacts",
+        "model",
+        "model.pkl",
+    ),
+)
 THRESHOLD = float(os.environ.get("THRESHOLD", "0.5"))
 UNIT_TEST_MODE = os.environ.get("UNIT_TEST_MODE", "0") == "1"
 
 predictor = None
 if not UNIT_TEST_MODE:
     predictor = SentimentPredictor(
-        PredictorConfig(run_id=RUN_ID, threshold=THRESHOLD)
+        PredictorConfig(model_path=MODEL_PATH, threshold=THRESHOLD)
     )
 
 HTML = """
@@ -43,9 +55,9 @@ HTML = """
 def health():
     return {
         "status": "ok",
-        "run_id": RUN_ID,
-        "unit_test_mode": UNIT_TEST_MODE,
         "model_type": "logreg_tfidf",
+        "unit_test_mode": UNIT_TEST_MODE,
+        "model_path": MODEL_PATH,
     }
 
 @app.route("/", methods=["GET", "POST"])

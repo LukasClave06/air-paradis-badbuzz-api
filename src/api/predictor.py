@@ -1,16 +1,14 @@
 import os
 from dataclasses import dataclass
 from typing import Dict, Any
-
-import mlflow
-import mlflow.sklearn
+import cloudpickle
 
 from src.common.text_cleaning import basic_clean
 
 
 @dataclass
 class PredictorConfig:
-    run_id: str
+    model_path: str
     threshold: float = 0.5
 
 
@@ -18,19 +16,12 @@ class SentimentPredictor:
     def __init__(self, cfg: PredictorConfig):
         self.cfg = cfg
 
-        tracking_uri = os.environ.get("MLFLOW_TRACKING_URI")
-        if tracking_uri:
-            mlflow.set_tracking_uri(tracking_uri)
-
-        self.model_uri = f"runs:/{cfg.run_id}/model"
-
-        # Pipeline sklearn complet : TF-IDF + LogisticRegression
-        self.model = mlflow.sklearn.load_model(self.model_uri)
+        with open(cfg.model_path, "rb") as f:
+            self.model = cloudpickle.load(f)
 
     def predict_one(self, text: str) -> Dict[str, Any]:
         cleaned = basic_clean(text)
 
-        # Le pipeline sklearn attend du texte brut
         proba = self.model.predict_proba([cleaned])[0]
         proba_neg = float(proba[0])  # label 0 = négatif
         proba_pos = float(proba[1])  # label 1 = positif

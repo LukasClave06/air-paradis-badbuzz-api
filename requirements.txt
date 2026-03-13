@@ -1,5 +1,4 @@
 flask
-mlflow
 scikit-learn
-pandas
 numpy
+cloudpickle
