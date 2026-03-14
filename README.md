@@ -73,22 +73,24 @@ deployment/
 GET /health
 
 Retour :
-
+```
 {
   "status": "ok",
   "model_type": "logreg_tfidf"
 }
+```
 Prédiction
+```
 POST /predict
-
+```
 Body :
-
+```
 {
   "text": "Air Paradis is amazing!"
 }
-
+```
 Réponse :
-
+```
 {
   "tweet": "...",
   "tweet_clean": "...",
@@ -98,43 +100,47 @@ Réponse :
   "pred_text": "positif",
   "bad_buzz": false
 }
+```
 Interface web
+```
 GET /
-
+```
 Permet de tester la prédiction via un formulaire HTML.
 
 MLflow
 
 Le modèle est chargé depuis MLflow :
-
+```
 runs:/be260e8b8f3e4ae7b3018afa00a828ec/model
-
+```
 Tracking local :
-
+```
 mlruns/
-
+```
 Variables utilisées :
-
+```
 MLFLOW_TRACKING_URI
 MLFLOW_RUN_ID
 THRESHOLD
+```
 Tests unitaires
 
 Tests réalisés avec pytest.
 
 Lancer :
-
+```
 pytest -v
-
+```
 Configuration :
-
+```
 pytest.ini
+```
 CI/CD avec GitHub Actions
 
 Workflow :
-
+```
 .github/workflows/ci.yml
-
+```
 À chaque push :
 
 installation des dépendances
@@ -180,29 +186,30 @@ nécessite plus d’espace disque pour fonctionner correctement.
 Lancer en local
 
 Créer environnement :
-
+```
 python -m venv venv
-
+```
 Activer :
-
+```
 venv\Scripts\activate
-
+```
 Installer :
-
+```
 pip install -r requirements.txt
-
+```
 Variables :
-
+```
 MLFLOW_TRACKING_URI=file:./mlruns
 MLFLOW_RUN_ID=be260e8b8f3e4ae7b3018afa00a828ec
-
+```
 Lancer :
-
+```
 python -m src.api.app
-
+```
 Puis :
-
+```
 http://127.0.0.1:8000
+```
 Auteur
 
 Projet réalisé dans le cadre de la formation IA / Data Scientist.
