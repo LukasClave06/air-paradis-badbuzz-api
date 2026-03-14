@@ -71,7 +71,7 @@ deployment/
 
 ```
 GET /health
-
+```
 Retour :
 ```
 {
