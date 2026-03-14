@@ -107,7 +107,7 @@ GET /
 ```
 Permet de tester la prédiction via un formulaire HTML.
 
-MLflow
+## MLflow
 
 Le modèle est chargé depuis MLflow :
 ```
@@ -123,7 +123,7 @@ MLFLOW_TRACKING_URI
 MLFLOW_RUN_ID
 THRESHOLD
 ```
-Tests unitaires
+## Tests unitaires
 
 Tests réalisés avec pytest.
 
@@ -143,11 +143,9 @@ Workflow :
 ```
 À chaque push :
 
-installation des dépendances
-
-lancement pytest
-
-validation automatique
+-installation des dépendances
+-lancement pytest
+-validation automatique
 
 Objectif :
 
@@ -167,13 +165,10 @@ https://lukas1.pythonanywhere.com/
 
 Le déploiement utilise :
 
-Flask + WSGI
-
-virtualenv Python 3.11
-
-modèle MLflow stocké dans le repo
-
-pipeline sklearn sérialisé avec cloudpickle
+-Flask + WSGI
+-virtualenv Python 3.11
+-modèle MLflow stocké dans le repo
+-pipeline sklearn sérialisé avec cloudpickle
 
 ⚠️ Important
 
@@ -211,6 +206,8 @@ Puis :
 http://127.0.0.1:8000
 ```
 Auteur
+
+Clave Lukas
 
 Projet réalisé dans le cadre de la formation IA / Data Scientist.
 
