@@ -135,7 +135,7 @@ Configuration :
 ```
 pytest.ini
 ```
-CI/CD avec GitHub Actions
+## CI/CD avec GitHub Actions
 
 Workflow :
 ```
